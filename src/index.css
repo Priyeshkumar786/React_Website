@@ -3,13 +3,19 @@
 
 @import "tailwindcss";
 
-*{font-family: Outfit;}
 
-.active hr{
-    @apply block
-    
+/* Global font */
+* {
+  font-family: 'Outfit', sans-serif;
 }
 
-::-webkit-scrollbar{
-    @apply hidden
+/* Active nav underline */
+.active hr {
+  display: block;
 }
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+

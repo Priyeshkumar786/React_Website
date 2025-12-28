@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 
-const Login = () => {
+const Signup = () => {
 
   const navigate = useNavigate();
 
@@ -85,16 +85,24 @@ const Login = () => {
           ref={titleRef}
           className="text-xl font-semibold text-gray-800 mb-2"
         >
-          Login
+          Create Account
         </h2>
         <p className="text-sm text-gray-500 mb-6">
-          Please login to book appointment
+          Please sign up to book appointment
         </p>
 
         {/* FORM */}
         <form className="space-y-4">
           <input
             ref={(el) => (inputRef.current[0] = el)}
+            type="text"
+            placeholder="Full Name"
+            className="w-full border border-gray-300 rounded-md px-4 py-2 
+                       focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+
+          <input
+            ref={(el) => (inputRef.current[1] = el)}
             type="email"
             placeholder="Email"
             className="w-full border border-gray-300 rounded-md px-4 py-2 
@@ -102,7 +110,7 @@ const Login = () => {
           />
 
           <input
-            ref={(el) => (inputRef.current[1] = el)}
+            ref={(el) => (inputRef.current[2] = el)}
             type="password"
             placeholder="Password"
             className="w-full border border-gray-300 rounded-md px-4 py-2 
@@ -129,21 +137,21 @@ const Login = () => {
             className="w-full bg-indigo-500 text-white py-2 rounded-md 
                        text-sm font-medium mt-2"
           >
-            Login
+            Create account
           </button>
         </form>
 
-        {/* SIGNUP LINK */}
+        {/* LOGIN LINK */}
         <p
           ref={linkRef}
           className="text-sm text-gray-500 text-center mt-6"
         >
-          Don’t have an account?{" "}
+          Already have an account?{" "}
           <span
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/login")}
             className="text-indigo-500 cursor-pointer hover:underline"
           >
-            Create account
+            Login here
           </span>
         </p>
       </div>
@@ -151,4 +159,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

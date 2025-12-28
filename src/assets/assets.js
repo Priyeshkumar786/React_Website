@@ -36,6 +36,11 @@ import General_physician from './General_physician.svg'
 import Gynecologist from './Gynecologist.svg'
 import Neurologist from './Neurologist.svg'
 import Pediatricians from './Pediatricians.svg'
+import parasvitals_logo from "/parasvitals_logo.png";
+import priyesh from "/priyesh_web.jpg"
+import Parasvitals_icon from "/Parasvitals_icon.png"
+
+
 
 
 export const assets = {
@@ -55,7 +60,13 @@ export const assets = {
     dropdown_icon,
     upload_icon,
     stripe_logo,
-    razorpay_logo
+    razorpay_logo,
+    parasvitals_logo,
+    priyesh,
+    dropdown_icon,
+    parasvitals_logo,
+    Parasvitals_icon
+
 }
 
 export const specialityData = [
