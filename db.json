@@ -1,20 +1,6 @@
 {
   "appointments": [
     {
-      "id": "3e3a",
-      "name": "vbnm,.",
-      "age": "29",
-      "aadhar": "111111111111",
-      "city": "",
-      "email": "g@gmail.com",
-      "contact": "2222222220",
-      "checkin": "",
-      "checkout": "",
-      "people": "",
-      "Appointment": "2025-12-30",
-      "date": "5"
-    },
-    {
       "id": "537a",
       "name": "sanjay",
       "age": "25",
@@ -23,6 +9,14 @@
       "email": "p@gmail.com",
       "contact": "6262462189",
       "people": ""
+    },
+    {
+      "id": "ab23",
+      "name": "Pricha",
+      "age": "26",
+      "aadhar": "626246219966",
+      "email": "anuj@gmail.com",
+      "contact": "6266884957"
     }
   ]
 }
