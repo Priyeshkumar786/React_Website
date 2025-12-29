@@ -184,3 +184,4 @@ export default Booking;
 
 
 // have to add some css in confirmbooking page
+// Crud done in book appointment page
