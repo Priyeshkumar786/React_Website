@@ -1,188 +1,3 @@
-// import React,{useState} from 'react'
-// import { useNavigate } from 'react-router-dom'
-// const Booking = () => {
-//     let Navigate=useNavigate()
-//     let [form,setform]=useState({
-//         name:"",
-//         age:"",
-//         aadhar:"",
-//         city:"",
-//         email:"",
-//         checkin:"",
-//         checkout:"",
-//         people:"",
-//     })
-
-//     let handlechange=((e)=>{
-//         setform({...form,[e.target.name]:e.target.value})
-//     })
-
-//     let handlesubmit=((e)=>{
-//         e.preventDefault()
-
-//         let valid=true
-
-//     if (form.name.trim()===""){
-//         alert("Name cannot be empty 👎")
-//         valid=false
-//     }
-//      else if(form.aadhar.trim()=="" || form.aadhar.length<12 || form.aadhar.length>12){
-//         alert("please enter12 digit aadhar number 😬")
-//         valid=false
-//     }
-
-//     else if(form.city.trim===""){
-//         alert("city cannot be empty 👎")
-//         valid=false
-//     }
-
-//     else if(form.age.trim==="" || Number(form.age) <18){
-//         alert("Age cannot be empty 😶 or less than 18 🤯")
-//         valid=false
-//     }
-
-//     else if(form.contact==="" || form.contact.length <10 || form.contact.length >10 ){
-//         alert("contact cannot be empty 😶 or less than or greater than 10 digit 🧐")
-//         valid=false
-//     }
-
-//     else if(form.email.trim()==="" || !(form.email.includes('@gmail.com'))){
-//         alert("email cannot be empty 😶 or include @gmail,com in it 🙄")
-//         valid=false
-//     }
-    
-//     if (valid) {
-//       alert("Form submitted 🥳")
-
-//       Navigate('/BookingConfirm')
-//     }
-   
-//     })
-
-//   return (
-//     <>
-//        <form
-//           onSubmit={handlesubmit}
-//         >
-//           <div>
-//             <label>Name</label>
-//             <input
-//               type="text"
-//               id="name"
-//               name="name"
-//               value={form.name}
-//               onChange={handlechange}
-              
-//             />
-//           </div>
-//            <div>
-//             <label>Aadhar number</label>
-//             <input
-//               type="number"
-//               id="aadhar"
-//               name="aadhar"
-//               value={form.aadhar}
-//               onChange={handlechange}
-              
-//             />
-//           </div>
-
-//           <div>
-//             <label>City</label>
-//             <input
-//               type="text"
-//               id="city"
-//               name="city"
-//               value={form.city}
-//               onChange={handlechange}
-              
-              
-//             />
-//           </div>
-
-//           <div>
-//             <label >Age</label>
-//             <input
-//               type="number"
-//               id="age"
-//               name="age"
-//               value={form.age}
-//               onChange={handlechange}
-              
-              
-//             />
-//           </div>
-
-//           <div >
-//             <label>Contact</label>
-//             <input
-//               type="number"
-//               id="contact"
-//               name="contact"
-//               value={form.contact}
-//               onChange={handlechange}
-              
-//             />
-//           </div>
-
-//           <div >
-//             <label>Email</label>
-//             <input
-//               type="email"
-//               id="email"
-//               name="email"
-//               value={form.email}
-//               onChange={handlechange}
-            
-//             />
-//           </div>
-
-//           <div >
-//             <label >CheckIn</label>
-//             <input
-//               type="date"
-//               id="checkin"
-//               name="checkin"
-//               value={form.checkin}
-//               onChange={handlechange}
-              
-//             />
-//           </div>
-
-//           <div >
-//             <label>CheckOut</label>
-//             <input
-//               type="date"
-//               id="checkout"
-//               name="checkout"
-//               value={form.checkout}
-//               onChange={handlechange}
-              
-//             />
-//           </div>
-
-//           <div >
-//             <label>No.of People</label>
-//             <input
-//               type="number"
-//               id="people"
-//               name="people"
-//               value={form.people}
-//               onChange={handlechange}
-              
-//             />
-//           </div>
-
-//           <button
-//             type="submit">Book It!!</button>
-
-//         </form>
-//     </>
-//   )
-// }
-
-// export default Booking
-
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
@@ -199,8 +14,6 @@ const Booking = () => {
     city: "",
     email: "",
     contact: "",
-    checkin: "",
-    checkout: "",
     people: "",
   });
 
@@ -222,25 +35,6 @@ const Booking = () => {
         duration: 0.8,
         ease: "power3.out",
       });
-
-      gsap.to(".glow-1", {
-        x: "20vw",
-        y: "10vh",
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      gsap.to(".glow-2", {
-        x: "-15vw",
-        y: "-20vh",
-        duration: 10,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 1,
-      });
     }, containerRef);
 
     return () => ctx.revert();
@@ -254,13 +48,22 @@ const Booking = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    /* 🔒 LOGIN CHECK */
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (!isLoggedIn) {
+      alert("Please login to book appointment 🔒");
+      navigate("/login");
+      return;
+    }
+
+    /* VALIDATIONS */
     if (form.name.trim() === "") return alert("Name required ❌");
     if (form.aadhar.length !== 12) return alert("12 digit Aadhar required ❌");
-    // if (form.city.trim() === "") return alert("City required ❌");
     if (Number(form.age) < 18) return alert("Age must be 18+ ❌");
     if (form.contact.length !== 10) return alert("10 digit contact required ❌");
     if (!form.email.includes("@gmail.com")) return alert("Valid Gmail required ❌");
 
+    /* API CALL */
     axios
       .post("http://localhost:3000/appointments", form)
       .then(() => {
@@ -270,10 +73,9 @@ const Booking = () => {
           filter: "blur(10px)",
           duration: 0.8,
           onComplete: () => navigate("/BookingConfirm"),
-          
         });
       })
-      // .catch(() => alert("Server error ❌"));
+      .catch(() => alert("Server error ❌"));
   };
 
   return (
@@ -281,14 +83,7 @@ const Booking = () => {
       ref={containerRef}
       className="relative min-h-screen bg-[#08080a] flex items-center justify-center p-6 overflow-hidden"
     >
-      {/* BACKGROUND */}
-      <div className="absolute inset-0 z-0">
-        <div className="glow-1 absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-amber-600/20 rounded-full blur-[120px]" />
-        <div className="glow-2 absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-amber-900/10 rounded-full blur-[150px]" />
-      </div>
-
-      {/* FORM */}
-      <div className="form-container relative z-10 w-full max-w-4xl backdrop-blur-2xl border border-white/10 rounded-[48px] p-10 md:p-16 shadow-2xl">
+      <div className="form-container w-full max-w-4xl p-10 md:p-16 rounded-[48px] border border-white/10 backdrop-blur-2xl">
         <div className="text-center mb-12 field-anim">
           <h2 className="text-5xl font-serif italic text-white mb-2">
             Secure Your Appointment
@@ -305,13 +100,9 @@ const Booking = () => {
           {[
             ["Patient Name", "name", "text"],
             ["Aadhar UID", "aadhar", "number"],
-            
             ["Age", "age", "number"],
             ["Contact", "contact", "number"],
             ["Email", "email", "email"],
-            ["Appointment Date", "Appointment", "date"],
-            ["Appointment time",  "date"],
-            
           ].map(([label, name, type]) => (
             <div key={name} className="field-anim flex flex-col gap-2">
               <label className="text-[10px] tracking-widest text-white/40">
@@ -322,7 +113,7 @@ const Booking = () => {
                 name={name}
                 value={form[name]}
                 onChange={handleChange}
-                className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-indigo-500"
+                className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
               />
             </div>
           ))}
@@ -337,16 +128,6 @@ const Booking = () => {
           </div>
         </form>
       </div>
-
-      {/* NORMAL STYLE TAG (VITE SAFE) */}
-      <style>
-        {`
-          input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-            opacity: 0.3;
-          }
-        `}
-      </style>
     </div>
   );
 };
