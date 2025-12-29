@@ -11,6 +11,8 @@ import Appointment from './pages/Appointment'
 import Navbar from './components/Navbar'
 import Footer from "./components/Footer"
 import Booking from './pages/Booking'
+import BookingConfirm from "./pages/BookingConfirm";
+
 
 
 
@@ -35,7 +37,7 @@ function App() {
           <Route path='/appointment/:docId' element={<Appointment />} />
 
           <Route path="/appointment/:docId/booking" element={<Booking />} />
-          {/* <Route path="/BookingConfirm" element={<BookingConfirm />} /> */}
+          <Route path="/BookingConfirm" element={<BookingConfirm />} />
 
         </Routes>
         <Footer />

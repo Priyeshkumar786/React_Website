@@ -256,13 +256,13 @@ const Booking = () => {
 
     if (form.name.trim() === "") return alert("Name required ❌");
     if (form.aadhar.length !== 12) return alert("12 digit Aadhar required ❌");
-    if (form.city.trim() === "") return alert("City required ❌");
+    // if (form.city.trim() === "") return alert("City required ❌");
     if (Number(form.age) < 18) return alert("Age must be 18+ ❌");
     if (form.contact.length !== 10) return alert("10 digit contact required ❌");
     if (!form.email.includes("@gmail.com")) return alert("Valid Gmail required ❌");
 
     axios
-      .post("http://localhost:3000/hotel", form)
+      .post("http://localhost:3000/appointments", form)
       .then(() => {
         gsap.to(".form-container", {
           opacity: 0,
@@ -270,9 +270,10 @@ const Booking = () => {
           filter: "blur(10px)",
           duration: 0.8,
           onComplete: () => navigate("/BookingConfirm"),
+          
         });
       })
-      .catch(() => alert("Server error ❌"));
+      // .catch(() => alert("Server error ❌"));
   };
 
   return (
@@ -282,17 +283,17 @@ const Booking = () => {
     >
       {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
-        <div className="glow-1 absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-600/20 rounded-full blur-[120px]" />
-        <div className="glow-2 absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-rose-900/10 rounded-full blur-[150px]" />
+        <div className="glow-1 absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-amber-600/20 rounded-full blur-[120px]" />
+        <div className="glow-2 absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-amber-900/10 rounded-full blur-[150px]" />
       </div>
 
       {/* FORM */}
       <div className="form-container relative z-10 w-full max-w-4xl backdrop-blur-2xl border border-white/10 rounded-[48px] p-10 md:p-16 shadow-2xl">
         <div className="text-center mb-12 field-anim">
           <h2 className="text-5xl font-serif italic text-white mb-2">
-            Secure Your Booking
+            Secure Your Appointment
           </h2>
-          <p className="text-xs tracking-[0.4em] uppercase text-indigo-400">
+          <p className="text-xs tracking-[0.4em] uppercase text-amber-400">
             Appointment Form
           </p>
         </div>
@@ -302,15 +303,15 @@ const Booking = () => {
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
           {[
-            ["Guest Name", "name", "text"],
+            ["Patient Name", "name", "text"],
             ["Aadhar UID", "aadhar", "number"],
-            ["City", "city", "text"],
+            
             ["Age", "age", "number"],
             ["Contact", "contact", "number"],
             ["Email", "email", "email"],
-            ["Check In", "checkin", "date"],
-            ["Check Out", "checkout", "date"],
-            ["Guests", "people", "number"],
+            ["Appointment Date", "Appointment", "date"],
+            ["Appointment time",  "date"],
+            
           ].map(([label, name, type]) => (
             <div key={name} className="field-anim flex flex-col gap-2">
               <label className="text-[10px] tracking-widest text-white/40">
@@ -329,7 +330,7 @@ const Booking = () => {
           <div className="md:col-span-3 mt-8 field-anim">
             <button
               type="submit"
-              className="w-full py-5 bg-white text-black font-bold tracking-widest rounded-full hover:bg-indigo-600 hover:text-white transition"
+              className="w-full py-5 bg-white text-black font-bold tracking-widest rounded-full hover:bg-amber-600 hover:text-white transition"
             >
               CONFIRM BOOKING
             </button>
