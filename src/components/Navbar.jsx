@@ -221,7 +221,7 @@ const Navbar = () => {
               }}
               className="mt-4 bg-red-500 text-white py-2 rounded-full"
             >
-              Logout
+              
             </button>
           )}
         </div>

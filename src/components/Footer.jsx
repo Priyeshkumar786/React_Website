@@ -119,7 +119,7 @@ const Footer = () => {
           ref={copyRef}
           className="py-5 text-sm text-center text-gray-500"
         >
-          Copyright © 2025 Parasvitals – All Rights Reserved.
+          Cybrom © 2025 Parasvitals – All Rights Reserved.
         </p>
       </div>
 
