@@ -175,3 +175,12 @@ const Booking = () => {
 };
 
 export default Booking;
+
+
+
+
+
+
+
+
+// have to add some css in confirmbooking page
