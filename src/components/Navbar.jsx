@@ -8,7 +8,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [token, setToken] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [open, setOpen] = useState(false);
 
   const navRef = useRef(null);
@@ -17,17 +17,17 @@ const Navbar = () => {
   const profileRef = useRef(null);
   const mobileRef = useRef(null);
 
-  /* ================= LOGO LOAD (SVG-LIKE DRAW + ROTATE) ================= */
+  /* ================= CHECK LOGIN ================= */
   useEffect(() => {
-    if (!logoRef.current) return;
+    const status = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(status === "true");
+  }, []);
 
+  /* ================= LOGO ANIMATION ================= */
+  useEffect(() => {
     gsap.fromTo(
       logoRef.current,
-      {
-        scale: 0,
-        rotate: -180,
-        filter: "blur(6px)",
-      },
+      { scale: 0, rotate: -180, filter: "blur(6px)" },
       {
         scale: 1,
         rotate: 0,
@@ -36,61 +36,23 @@ const Navbar = () => {
         ease: "elastic.out(1, 0.6)",
       }
     );
-  }, []);
-
-  /* ================= LOGO HEARTBEAT GLOW ================= */
-  useEffect(() => {
-    if (!logoRef.current) return;
 
     gsap.to(logoRef.current, {
       boxShadow: "0 0 25px rgba(245,158,11,0.6)",
       repeat: -1,
       yoyo: true,
       duration: 1.2,
-      ease: "power1.inOut",
     });
   }, []);
 
-  /* ================= NAVBAR LOAD ================= */
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-
     tl.from(navRef.current, { y: -80, opacity: 0, duration: 0.8 })
       .from(menuRef.current, { y: -20, opacity: 0, stagger: 0.15 }, "-=0.4")
       .from(profileRef.current, { scale: 0, opacity: 0 }, "-=0.3");
   }, []);
 
-  /* ================= SCROLL HIDE + LOGO RESIZE ================= */
   useEffect(() => {
-    let lastScroll = window.scrollY;
-
-    const handleScroll = () => {
-      const current = window.scrollY;
-
-      // Navbar hide / show
-      if (current > lastScroll && current > 120) {
-        gsap.to(navRef.current, { y: -100, duration: 0.4 });
-      } else {
-        gsap.to(navRef.current, { y: 0, duration: 0.4 });
-      }
-
-      // Logo resize
-      gsap.to(logoRef.current, {
-        scale: current > 100 ? 0.85 : 1,
-        duration: 0.3,
-      });
-
-      lastScroll = current;
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  /* ================= MOBILE MENU ================= */
-  useEffect(() => {
-    if (!mobileRef.current) return;
-
     gsap.to(mobileRef.current, {
       x: open ? 0 : "100%",
       duration: 0.4,
@@ -98,8 +60,15 @@ const Navbar = () => {
     });
   }, [open]);
 
+  /* ================= LOGOUT ================= */
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    navigate("/login", { replace: true });
+  };
+
   const links = [
-    { name: "HOME", path: "/" },
+    { name: "HOME", path: "/home" },
     { name: "ALL DOCTORS", path: "/doctors" },
     { name: "ABOUT", path: "/about" },
     { name: "CONTACT", path: "/contact" },
@@ -119,9 +88,8 @@ const Navbar = () => {
           ref={logoRef}
           onClick={() => navigate("/")}
           src={assets.parasvitals_logo}
-          alt="ParasVitals Logo"
-          className="h-10 md:h-12 w-auto object-contain cursor-pointer
-          rounded-lg transition-transform"
+          alt="Logo"
+          className="h-10 md:h-12 cursor-pointer rounded-lg"
         />
 
         {/* DESKTOP LINKS */}
@@ -129,14 +97,8 @@ const Navbar = () => {
           {links.map((item, index) => (
             <NavLink key={index} to={item.path}>
               <li
-                ref={el => (menuRef.current[index] = el)}
+                ref={(el) => (menuRef.current[index] = el)}
                 className="relative cursor-pointer group"
-                onMouseEnter={e =>
-                  gsap.to(e.currentTarget, { y: -3, duration: 0.2 })
-                }
-                onMouseLeave={e =>
-                  gsap.to(e.currentTarget, { y: 0, duration: 0.2 })
-                }
               >
                 {item.name}
                 <span
@@ -152,14 +114,21 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* RIGHT */}
+        {/* RIGHT SECTION */}
         <div ref={profileRef} className="flex items-center gap-4">
-          {/* MOBILE ICON */}
-          <button onClick={() => setOpen(true)} className="md:hidden">
-            <Menu />
-          </button>
+          {/* SHOW LOGIN ONLY IF NOT LOGGED IN */}
+          {!isLoggedIn && (
+            <button
+              onClick={() => navigate("/login")}
+              className="hidden md:block border border-amber-500 text-amber-600
+              px-5 py-2 rounded-full hover:bg-amber-500 hover:text-white transition"
+            >
+              Login
+            </button>
+          )}
 
-          {token ? (
+          {/* PROFILE DROPDOWN (ONLY AFTER LOGIN) */}
+          {isLoggedIn && (
             <div className="relative group hidden md:block">
               <div className="flex items-center gap-2 cursor-pointer">
                 <img
@@ -174,33 +143,38 @@ const Navbar = () => {
                 />
               </div>
 
-              {/* DROPDOWN */}
               <div
                 className="absolute right-0 pt-4 opacity-0 scale-90
-                group-hover:opacity-100 group-hover:scale-100
-                transition-all duration-300"
+                group-hover:opacity-100 group-hover:scale-100 transition"
               >
-                <div className="bg-white rounded-xl shadow-xl p-4 min-w-48">
-                  <p onClick={() => navigate("/my-profile")} className="hover:text-black cursor-pointer">
+                <div className="bg-white rounded-xl shadow-xl p-4 min-w-48 space-y-2">
+                  <p
+                    onClick={() => navigate("/my-profile")}
+                    className="cursor-pointer hover:text-amber-500"
+                  >
                     My Profile
                   </p>
-                  <p onClick={() => navigate("/my-appointments")} className="hover:text-black cursor-pointer">
+                  <p
+                    onClick={() => navigate("/my-appointments")}
+                    className="cursor-pointer hover:text-amber-500"
+                  >
                     My Appointments
                   </p>
-                  <p onClick={() => setToken(false)} className="hover:text-red-500 cursor-pointer">
+                  <p
+                    onClick={handleLogout}
+                    className="cursor-pointer text-red-500 hover:underline"
+                  >
                     Logout
                   </p>
                 </div>
               </div>
             </div>
-          ) : (
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-amber-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
-            >
-              Create Account
-            </button>
           )}
+
+          {/* MOBILE MENU ICON */}
+          <button onClick={() => setOpen(true)} className="md:hidden">
+            <Menu />
+          </button>
         </div>
       </nav>
 
@@ -223,11 +197,33 @@ const Navbar = () => {
                 navigate(item.path);
                 setOpen(false);
               }}
-              className="cursor-pointer hover:text-amber-500"
+              className="cursor-pointer"
             >
               {item.name}
             </p>
           ))}
+
+          {!isLoggedIn ? (
+            <button
+              onClick={() => {
+                navigate("/login");
+                setOpen(false);
+              }}
+              className="mt-4 bg-amber-500 text-white py-2 rounded-full"
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                handleLogout();
+                setOpen(false);
+              }}
+              className="mt-4 bg-red-500 text-white py-2 rounded-full"
+            >
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </>
