@@ -89,21 +89,21 @@ const MyAppointments = () => {
 
               <div className="text-sm text-gray-600">
                 <p className="font-medium text-gray-800 text-base">
-                  Dr. Richard James
+                  Dr. Pratibha Mishra
                 </p>
                 <p className="mb-2">General physician</p>
 
                 <p className="font-medium text-gray-700">Address:</p>
                 <p>
-                  57th Cross, Richmond <br />
-                  Circle, Church Road, London
+                  57th Chunabhatti <br />
+                  Khushilal Bhopal
                 </p>
 
                 <p className="mt-2">
                   <span className="font-medium text-gray-700">
                     Date & Time:
                   </span>{" "}
-                  25 July, 2024 | 8:30 PM
+                  25 Dec, 2025 | 8:30 PM
                 </p>
               </div>
             </div>
