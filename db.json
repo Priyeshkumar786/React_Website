@@ -17,6 +17,30 @@
       "aadhar": "626246219966",
       "email": "anuj@gmail.com",
       "contact": "6266884957"
+    },
+    {
+      "id": "96a9",
+      "name": "pripri",
+      "age": "24",
+      "aadhar": "626246219977",
+      "email": "pripri@gmail.com",
+      "contact": "6262462199"
+    },
+    {
+      "id": "ba58",
+      "name": "Priyesh Kumar Mishra",
+      "age": "24",
+      "aadhar": "885885885885",
+      "email": "mishrapriyesh.521@gmail.com",
+      "contact": "6262462199"
+    },
+    {
+      "id": "369a",
+      "name": "pripri",
+      "age": "26",
+      "aadhar": "626246219933",
+      "email": "pripri@gmail.com",
+      "contact": "6162636465"
     }
   ]
 }

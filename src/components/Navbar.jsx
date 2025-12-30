@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { assets } from "../assets/assets";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import gsap from "gsap";
 import { Menu, X } from "lucide-react";
+import gsap from "gsap";
+import { assets } from "../assets/assets";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -12,16 +12,18 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const navRef = useRef(null);
+  const mobileRef = useRef(null);
+  const dropdownRef = useRef(null);
   const logoRef = useRef(null);
+  const containerRef = useRef(null);
   const menuRef = useRef([]);
   const profileRef = useRef(null);
-  const mobileRef = useRef(null);
 
   /* ================= CHECK LOGIN ================= */
   useEffect(() => {
     const status = localStorage.getItem("isLoggedIn");
     setIsLoggedIn(status === "true");
-  }, []);
+  }, [location.pathname]);
 
   /* ================= LOGO ANIMATION ================= */
   useEffect(() => {
@@ -59,7 +61,6 @@ const Navbar = () => {
       ease: "power3.out",
     });
   }, [open]);
-
   /* ================= LOGOUT ================= */
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
@@ -69,14 +70,14 @@ const Navbar = () => {
 
   const links = [
     { name: "HOME", path: "/home" },
-    { name: "ALL DOCTORS", path: "/doctors" },
+    { name: "DOCTORS", path: "/doctors" },
     { name: "ABOUT", path: "/about" },
     { name: "CONTACT", path: "/contact" },
   ];
 
   return (
     <>
-      {/* ================= NAVBAR ================= */}
+        {/* ================= NAVBAR ================= */}
       <nav
         ref={navRef}
         className="sticky top-0 z-50 flex items-center justify-between
@@ -114,70 +115,91 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* RIGHT SECTION */}
-        <div ref={profileRef} className="flex items-center gap-4">
-          {/* SHOW LOGIN ONLY IF NOT LOGGED IN */}
-          {!isLoggedIn && (
-            <button
-              onClick={() => navigate("/login")}
-              className="hidden md:block border border-amber-500 text-amber-600
-              px-5 py-2 rounded-full hover:bg-amber-500 hover:text-white transition"
-            >
-              Login
-            </button>
-          )}
+{/* RIGHT SECTION */}
+<div ref={profileRef} className="flex items-center gap-4">
+  {/* PROFILE DROPDOWN */}
+  {isLoggedIn && (
+    <div
+      className="relative"
+      onMouseEnter={() =>
+        gsap.to(dropdownRef.current, {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.3,
+          pointerEvents: "auto",
+        })
+      }
+      onMouseLeave={() =>
+        gsap.to(dropdownRef.current, {
+          opacity: 0,
+          scale: 0.95,
+          y: -10,
+          duration: 0.25,
+          pointerEvents: "none",
+        })
+      }
+    >
+      <div className="flex items-center gap-2 cursor-pointer">
+        <img
+          src={assets.priyesh}
+          className="w-9 h-9 rounded-full border-2 border-amber-400"
+          alt="profile"
+        />
+        <img
+          src={assets.dropdown_icon}
+          className="w-2.5"
+          alt="arrow"
+        />
+      </div>
 
-          {/* PROFILE DROPDOWN (ONLY AFTER LOGIN) */}
-          {isLoggedIn && (
-            <div className="relative group hidden md:block">
-              <div className="flex items-center gap-2 cursor-pointer">
-                <img
-                  src={assets.priyesh}
-                  className="w-9 rounded-full border-2 border-amber-400"
-                  alt="profile"
-                />
-                <img
-                  src={assets.dropdown_icon}
-                  className="w-2.5 transition group-hover:rotate-180"
-                  alt="arrow"
-                />
-              </div>
-
-              <div
-                className="absolute right-0 pt-4 opacity-0 scale-90
-                group-hover:opacity-100 group-hover:scale-100 transition"
-              >
-                <div className="bg-white rounded-xl shadow-xl p-4 min-w-48 space-y-2">
-                  <p
-                    onClick={() => navigate("/my-profile")}
-                    className="cursor-pointer hover:text-amber-500"
-                  >
-                    My Profile
-                  </p>
-                  <p
-                    onClick={() => navigate("/my-appointments")}
-                    className="cursor-pointer hover:text-amber-500"
-                  >
-                    My Appointments
-                  </p>
-                  <p
-                    onClick={handleLogout}
-                    className="cursor-pointer text-red-500 hover:underline"
-                  >
-                    Logout
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* MOBILE MENU ICON */}
-          <button onClick={() => setOpen(true)} className="md:hidden">
-            <Menu />
-          </button>
+      <div
+        ref={dropdownRef}
+        className="absolute right-0 pt-4 opacity-0 scale-90"
+      >
+        <div className="bg-white rounded-xl shadow-xl p-4 min-w-48 space-y-2">
+          <p
+            onClick={() => navigate("/my-profile")}
+            className="cursor-pointer hover:text-amber-500"
+          >
+            My Profile
+          </p>
+          <p
+            onClick={() => navigate("/my-appointments")}
+            className="cursor-pointer hover:text-amber-500"
+          >
+            My Appointments
+          </p>
+          <p
+            onClick={handleLogout}
+            className="cursor-pointer text-red-500 hover:underline"
+          >
+            Logout
+          </p>
         </div>
+      </div>
+    </div>
+  )}
+
+  {/* LOGIN / LOGOUT */}
+  {!isLoggedIn && (
+    <button
+      onClick={() => navigate("/login")}
+      className="hidden md:block border border-amber-500 text-amber-600
+      px-5 py-2 rounded-full hover:bg-amber-500 hover:text-white transition"
+    >
+      Login
+    </button>
+  )}
+
+  {/* MOBILE MENU ICON */}
+  <button onClick={() => setOpen(true)} className="md:hidden">
+    <Menu />
+  </button>
+</div>
       </nav>
 
+      
       {/* ================= MOBILE DRAWER ================= */}
       <div
         ref={mobileRef}
@@ -221,7 +243,7 @@ const Navbar = () => {
               }}
               className="mt-4 bg-red-500 text-white py-2 rounded-full"
             >
-              
+              Logout
             </button>
           )}
         </div>
