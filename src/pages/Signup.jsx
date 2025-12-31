@@ -22,11 +22,12 @@ const Signup = () => {
     confirmPassword: "",
   });
 
-  /* ================= CINEMATIC GSAP ANIMATION ================= */
+  const [errors, setErrors] = useState({});
+
+  /* ================= GSAP ================= */
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    // Animated gradient
     gsap.to(bgRef.current, {
       backgroundPosition: "200% 200%",
       duration: 20,
@@ -34,67 +35,26 @@ const Signup = () => {
       ease: "none",
     });
 
-    // Floating particles
     particlesRef.current.forEach((p, i) => {
       gsap.to(p, {
         x: "random(-250,250)",
         y: "random(-250,250)",
-        scale: "random(0.6,1.4)",
-        opacity: "random(0.2,0.6)",
         duration: "random(7,14)",
         repeat: -1,
         yoyo: true,
-        ease: "sine.inOut",
-        delay: i * 0.25,
+        delay: i * 0.2,
       });
     });
 
-    // Page intro
-    tl.from(pageRef.current, { opacity: 0, duration: 1 })
-      .from(
-        cardRef.current,
-        {
-          y: 180,
-          scale: 0.65,
-          opacity: 0,
-          rotateX: 30,
-          duration: 1.2,
-        },
-        "-=0.6"
-      )
-      .from(
-        titleRef.current,
-        { y: 40, opacity: 0, duration: 0.6 },
-        "-=0.5"
-      )
-      .from(
-        inputsRef.current,
-        {
-          y: 30,
-          opacity: 0,
-          stagger: 0.12,
-          duration: 0.6,
-        },
-        "-=0.4"
-      )
-      .from(
-        btnRef.current,
-        {
-          scale: 0,
-          opacity: 0,
-          duration: 0.6,
-          ease: "elastic.out(1,0.5)",
-        },
-        "-=0.2"
-      )
-      .from(
-        linkRef.current,
-        { y: 20, opacity: 0, duration: 0.4 },
-        "-=0.3"
-      );
+    tl.from(pageRef.current, { opacity: 0 })
+      .from(cardRef.current, { y: 150, opacity: 0, scale: 0.7 })
+      .from(titleRef.current, { y: 30, opacity: 0 })
+      .from(inputsRef.current, { opacity: 0, y: 20, stagger: 0.1 })
+      .from(btnRef.current, { scale: 0 })
+      .from(linkRef.current, { opacity: 0 });
   }, []);
 
-  /* ================= 3D CARD TILT ================= */
+  /* ================= TILT ================= */
   const tilt = (e) => {
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -103,52 +63,53 @@ const Signup = () => {
     gsap.to(cardRef.current, {
       rotateX: ((y / rect.height) - 0.5) * -20,
       rotateY: ((x / rect.width) - 0.5) * 20,
-      duration: 0.4,
+      duration: 0.3,
     });
   };
 
   const resetTilt = () => {
-    gsap.to(cardRef.current, {
-      rotateX: 0,
-      rotateY: 0,
-      duration: 0.6,
-    });
+    gsap.to(cardRef.current, { rotateX: 0, rotateY: 0 });
   };
 
-  /* ================= FORM LOGIC ================= */
+  /* ================= FORM ================= */
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const validate = () => {
+    let err = {};
+
+    if (form.name.trim().length < 3)
+      err.name = "Name must be at least 3 characters";
+
+    if (!/^\S+@\S+\.\S+$/.test(form.email))
+      err.email = "Invalid email address";
+
+    if (!/^[0-9]{10}$/.test(form.phone))
+      err.phone = "Phone must be 10 digits";
+
+    if (!/^(?=.*\d).{6,}$/.test(form.password))
+      err.password = "Password must be 6+ chars & 1 number";
+
+    if (form.password !== form.confirmPassword)
+      err.confirmPassword = "Passwords do not match";
+
+    setErrors(err);
+    return Object.keys(err).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      !form.name ||
-      !form.email ||
-      !form.phone ||
-      !form.password ||
-      !form.confirmPassword
-    ) {
+    if (!validate()) {
       shake();
-      alert("All fields are required");
-      return;
-    }
-
-    if (form.password !== form.confirmPassword) {
-      shake();
-      alert("Passwords do not match");
       return;
     }
 
     localStorage.setItem(
       "doctorAppUser",
-      JSON.stringify({
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        password: form.password,
-      })
+      JSON.stringify(form)
     );
 
     navigate("/login");
@@ -163,90 +124,63 @@ const Signup = () => {
   };
 
   return (
-    <div ref={pageRef} className="min-h-screen flex items-center justify-center overflow-hidden px-4">
-      {/* 🌈 BACKGROUND */}
+    <div ref={pageRef} className="min-h-screen flex items-center justify-center">
       <div
         ref={bgRef}
-        className="absolute inset-0 bg-size-[400%_400%]
-                   bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500"
+        className="absolute inset-0 bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 bg-size-[400%_400%]"
       />
 
-      {/* ✨ PARTICLES */}
-      {[...Array(14)].map((_, i) => (
+      {[...Array(12)].map((_, i) => (
         <span
           key={i}
           ref={(el) => (particlesRef.current[i] = el)}
           className="absolute w-3 h-3 bg-white rounded-full opacity-30"
-          style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-          }}
+          style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%` }}
         />
       ))}
 
-      {/* 💎 GLASS CARD */}
       <div
         ref={cardRef}
         onMouseMove={tilt}
         onMouseLeave={resetTilt}
-        className="relative z-10 w-full max-w-md p-8 rounded-3xl
-                   bg-white/20 backdrop-blur-2xl border border-white/30
-                   shadow-[0_40px_120px_rgba(0,0,0,0.4)]
-                   text-white"
-        style={{ transformStyle: "preserve-3d" }}
+        className="relative z-10 w-full max-w-md p-8 rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30 text-white"
       >
-        <h2 ref={titleRef} className="text-3xl font-extrabold text-center mb-2">
+        <h2 ref={titleRef} className="text-3xl font-bold text-center mb-6">
           Create Account
         </h2>
-        <p className="text-center text-sm opacity-80 mb-6">
-          Doctor Appointment System
-        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {["name", "email", "phone", "password", "confirmPassword"].map(
             (field, i) => (
-              <input
-                key={i}
-                ref={(el) => (inputsRef.current[i] = el)}
-                type={field.includes("password") ? "password" : "text"}
-                name={field}
-                placeholder={field.replace(/([A-Z])/g, " $1")}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl bg-white/20
-                           placeholder-white/70 outline-none
-                           focus:ring-2 focus:ring-white"
-              />
+              <div key={i}>
+                <input
+                  ref={(el) => (inputsRef.current[i] = el)}
+                  type={field.includes("password") ? "password" : "text"}
+                  name={field}
+                  placeholder={field}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl bg-white/20 outline-none"
+                />
+                {errors[field] && (
+                  <p className="text-red-300 text-xs mt-1">{errors[field]}</p>
+                )}
+              </div>
             )
           )}
 
           <button
             ref={btnRef}
-            type="submit"
-            onMouseEnter={(e) =>
-              gsap.to(e.currentTarget, {
-                scale: 1.08,
-                boxShadow: "0 20px 60px rgba(255,255,255,0.6)",
-                duration: 0.3,
-              })
-            }
-            onMouseLeave={(e) =>
-              gsap.to(e.currentTarget, {
-                scale: 1,
-                boxShadow: "0 0 0 rgba(0,0,0,0)",
-                duration: 0.3,
-              })
-            }
-            className="w-full py-3 mt-2 rounded-xl bg-white text-indigo-600 font-semibold"
+            className="w-full py-3 bg-white text-indigo-600 rounded-xl font-semibold"
           >
             Sign Up
           </button>
         </form>
 
-        <p ref={linkRef} className="text-center text-sm mt-6 opacity-80">
+        <p ref={linkRef} className="text-center mt-4 text-sm">
           Already have an account?{" "}
           <span
             onClick={() => navigate("/login")}
-            className="underline font-semibold cursor-pointer"
+            className="underline cursor-pointer"
           >
             Login
           </span>

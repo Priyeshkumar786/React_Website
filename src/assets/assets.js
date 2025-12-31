@@ -97,6 +97,7 @@ export const specialityData = [
 ]
 
 export const doctors = [
+    
     {
         _id: 'doc1',
         name: 'Dr. Pratibha MIshra',
@@ -113,7 +114,7 @@ export const doctors = [
     },
     {
         _id: 'doc2',
-        name: 'Dr. Emily Larson',
+        name: 'Dr. anuj upadhay',
         image: doc2,
         speciality: 'Gynecologist',
         degree: 'MBBS',
@@ -139,20 +140,7 @@ export const doctors = [
             line2: 'Circle, Ring Road, London'
         }
     },
-    {
-        _id: 'doc4',
-        name: 'Dr. Christopher Lee',
-        image: doc4,
-        speciality: 'Pediatricians',
-        degree: 'MBBS',
-        experience: '2 Years',
-        about: 'Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.',
-        fees: 40,
-        address: {
-            line1: '47th Cross, Richmond',
-            line2: 'Circle, Ring Road, London'
-        }
-    },
+    
     {
         _id: 'doc5',
         name: 'Dr. Anisha Majumdar',
@@ -169,7 +157,7 @@ export const doctors = [
     },
     {
         _id: 'doc6',
-        name: 'Dr. Andrew Williams',
+        name: 'Dr. abhay karuk',
         image: doc6,
         speciality: 'Neurologist',
         degree: 'MBBS',
@@ -183,7 +171,7 @@ export const doctors = [
     },
     {
         _id: 'doc7',
-        name: 'Dr. Christopher Davis',
+        name: 'Dr. shaily Davis',
         image: doc7,
         speciality: 'General physician',
         degree: 'MBBS',
@@ -197,7 +185,7 @@ export const doctors = [
     },
     {
         _id: 'doc8',
-        name: 'Dr. Timothy White',
+        name: 'Dr. raj shami',
         image: doc8,
         speciality: 'Gynecologist',
         degree: 'MBBS',
@@ -211,7 +199,7 @@ export const doctors = [
     },
     {
         _id: 'doc9',
-        name: 'Dr. Ava Mitchell',
+        name: 'Dr. Ava sahu',
         image: doc9,
         speciality: 'Dermatologist',
         degree: 'MBBS',
