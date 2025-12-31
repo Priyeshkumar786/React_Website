@@ -130,7 +130,7 @@ const Booking = () => {
 
           <button
             type="submit"
-            className="md:col-span-3 py-4 bg-cyan-700 rounded-full font-boldborder-black/90 "
+            className="md:col-span-3 py-4 bg-cyan-700 rounded-full font-bold border-black/90"
           >
             {editId ? "UPDATE" : "CONFIRM BOOKING ✅"}
           </button>
