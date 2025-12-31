@@ -187,3 +187,4 @@ export default Booking;
 // Crud done in book appointment page
 // login credential are in localstorage
 // make sure json server is running on port 3000
+// json server command: npx json-server --watch db.json --port 3000
